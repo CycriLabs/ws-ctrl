@@ -6,6 +6,9 @@
     "type": "git",
     "url": "git+https://github.com/CycriLabs/ws-ctrl.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Marc Scheib",
   "license": "MIT",
   "bugs": {
