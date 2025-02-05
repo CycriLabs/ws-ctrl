@@ -1,0 +1,4 @@
+{
+  "*.{js,ts,md,css,scss,html}": ["prettier --write"],
+  "yarn.lock": ["git rm --cached"]
+}

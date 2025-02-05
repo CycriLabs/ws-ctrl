@@ -1,0 +1,35 @@
+{
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 10000,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/*.js": {
+      "when": "$(basename).ts"
+    },
+    "**/*.js.map": {
+      "when": "$(basename)"
+    }
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/dist/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true
+  },
+  "telemetry.enableCrashReporter": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "prettier.requireConfig": true,
+  "prettier.singleQuote": true,
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "editor.renderWhitespace": "all",
+  "editor.rulers": [80]
+}
