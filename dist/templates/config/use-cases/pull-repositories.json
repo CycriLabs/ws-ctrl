@@ -1,0 +1,27 @@
+{
+  "$schema": "https://gist.githubusercontent.com/MarcScheib/eaed8888c0f47a4d52b7f938c70c2355/raw/8734e53ec76e085fcb559c3cdb394a5ea84e8ca0/use-case.schema.json",
+  "id": "pull-repositories",
+  "name": "Pull repositories",
+  "description": "This use case pulls repositories.",
+  "steps": [
+    {
+      "type": "PROMPT",
+      "description": "Select the repositories to pull",
+      "context": {
+        "name": "repositories",
+        "message": "Select the repositories",
+        "type": "multiselect",
+        "entityKey": "REPOSITORIES"
+      }
+    },
+    {
+      "type": "COMMAND",
+      "description": "Pull repositories",
+      "loop": {
+        "list": "repositories",
+        "name": "repository"
+      },
+      "command": "`git -C ${WORKING_DIR}/${repository.alias} pull`"
+    }
+  ]
+}

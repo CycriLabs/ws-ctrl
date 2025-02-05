@@ -6,7 +6,6 @@ import {
   DIR_DEVELOPMENT,
   DIR_DOCKER,
   DIR_GIT_TEMPLATES,
-  DIR_NGINX,
   DIR_REPOSITORIES,
   DIR_SERVERS,
   DIR_TEMPLATES,
@@ -40,10 +39,6 @@ export class TemplatesAccess {
 
   getDockerDir(): string {
     return join(this.#getBaseDir(), DIR_CONFIG, DIR_DOCKER);
-  }
-
-  getNginxDir(): string {
-    return join(this.#getBaseDir(), DIR_CONFIG, DIR_NGINX);
   }
 
   getServersDir(): string {
@@ -90,8 +85,6 @@ export class TemplatesAccess {
 
   async initWorkspace(): Promise<void> {
     await this.syncTemplates();
-    // copy proxy setup to main dir
-    await this.copyProxySetup();
     // create the target dir
     await this.copyDevelopmentDirectory();
   }
@@ -120,11 +113,6 @@ export class TemplatesAccess {
         '.git',
       ]);
     }
-  }
-
-  async copyProxySetup(): Promise<void> {
-    await copyDirectory(this.getNginxDir(), this.getWorkspacePath());
-    await copyDirectory(this.getDockerDir(), this.getWorkspacePath());
   }
 
   async copyDevelopmentDirectory(): Promise<void> {

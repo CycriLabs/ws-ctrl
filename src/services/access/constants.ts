@@ -10,12 +10,10 @@ export const DIR_TEMPLATES = 'templates';
  * directory, e.g. servers, use-cases, etc.
  */
 export const DIR_CONFIG = 'config';
-export const DIR_DATASOURCES = 'datasources';
 export const DIR_DOCKER = 'docker';
-export const DIR_NGINX = 'nginx';
-export const DIR_POSTGRESQL = 'postgresql';
-export const DIR_SECRET_TEMPLATES = 'secret-templates';
 export const DIR_GIT_TEMPLATES = 'git-templates';
+export const DIR_SECRET_TEMPLATES = 'secret-templates';
+export const DIR_SERVICES_CONFIG = 'services-config';
 // entity dirs
 export const DIR_REPOSITORIES = 'repositories';
 export const DIR_SERVERS = 'servers';

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://gist.githubusercontent.com/MarcScheib/eaed8888c0f47a4d52b7f938c70c2355/raw/8734e53ec76e085fcb559c3cdb394a5ea84e8ca0/use-case.schema.json",
+  "id": "list-containers",
+  "name": "List containers",
+  "description": "List containers.",
+  "steps": [
+    {
+      "type": "COMMAND",
+      "description": "List all running docker containers",
+      "command": "`docker compose ps`"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://gist.githubusercontent.com/MarcScheib/eaed8888c0f47a4d52b7f938c70c2355/raw/8734e53ec76e085fcb559c3cdb394a5ea84e8ca0/use-case.schema.json",
+  "id": "init",
+  "name": "Init use-case",
+  "description": "The init use-case is called from the init command",
+  "state": "INITIAL",
+  "steps": [
+    {
+      "type": "PROMPT",
+      "context": {
+        "name": "clone",
+        "message": "Do you want to clone repositories initially?",
+        "type": "toggle"
+      }
+    },
+    {
+      "type": "USE_CASE",
+      "description": "Do you want to clone repositories initially?",
+      "skipIf": "clone === false",
+      "useCase": "clone-repositories"
+    }
+  ]
+}

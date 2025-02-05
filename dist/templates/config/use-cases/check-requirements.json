@@ -1,0 +1,26 @@
+{
+  "$schema": "https://gist.githubusercontent.com/MarcScheib/eaed8888c0f47a4d52b7f938c70c2355/raw/8734e53ec76e085fcb559c3cdb394a5ea84e8ca0/use-case.schema.json",
+  "id": "check-requirements",
+  "name": "Check requirements",
+  "description": "This use case checks the requirements to develop locally.",
+  "steps": [
+    {
+      "type": "COMMAND",
+      "description": "Execute commands",
+      "context": {
+        "commands": [
+          "git --version",
+          "node --version",
+          "npm --version",
+          "docker --version",
+          "docker compose version"
+        ]
+      },
+      "loop": {
+        "list": "STEP.context.commands",
+        "name": "command"
+      },
+      "command": "`${command}`"
+    }
+  ]
+}
