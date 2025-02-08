@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BusinessAttributes": {
+      "type": "object",
+      "properties": {
+        "authPassword": {
+          "type": "string",
+          "description": "The password of the keycloak admin user that is used to load secrets from the keycloak server. If not provided, the user will be prompted for the password."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "title": "Server and Related Types Schema",
+  "description": "JSON Schema definitions for Server, BusinessAttributes, and inherited BaseEntity types",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier of the entity"
+    },
+    "name": {
+      "type": "string",
+      "description": "The display name used throughout all prompts"
+    },
+    "host": {
+      "type": "string",
+      "description": "The host of the server. This is the URL that is used to connect to the server."
+    },
+    "attributes": {
+      "$ref": "#/definitions/BusinessAttributes",
+      "description": "The attributes of the server that are related to the business use cases."
+    }
+  },
+  "required": ["id", "name", "host"]
+}

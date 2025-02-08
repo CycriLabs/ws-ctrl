@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BusinessAttributes": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["LIB", "SERVICE", "APP", "UNKNOWN"],
+          "description": "Purpose of the code in the repository. Can be a library, a service or an application."
+        },
+        "context": {
+          "type": "string",
+          "description": "The context of the service on which it listens for REST requests."
+        },
+        "serviceVariable": {
+          "type": "string",
+          "description": "The variable name that is used to reference the target service URL in configurations."
+        },
+        "port": {
+          "type": "number",
+          "description": "The port on which the service listens for REST requests."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier of the entity"
+    },
+    "name": {
+      "type": "string",
+      "description": "The display name used throughout all prompts"
+    },
+    "alias": {
+      "type": "string",
+      "description": "The alias of the repository. If not provided, the name will be used. Can be e.g. used to always check out the repository to the same directory."
+    },
+    "url": {
+      "type": "string",
+      "description": "The URL of the repository. If not provided, the default workspace configuration URL will be used."
+    },
+    "attributes": {
+      "$ref": "#/definitions/BusinessAttributes",
+      "description": "The attributes of the repository that are related to the business use cases."
+    }
+  },
+  "required": ["id", "name"]
+}
