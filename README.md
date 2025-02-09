@@ -216,20 +216,12 @@ create new use cases.
 The following use cases are available out of the box and provided by the CLI
 utility package:
 
-| Use case name                    | Description                                                               |
-| -------------------------------- | ------------------------------------------------------------------------- |
-| `check-requirements`             | Checks the requirements for the workspace                                 |
-| `clone-repositories`             | Clones selected repositories into the workspace                           |
-| `configure-services`             | Allows to configure services for local development, local or remote usage |
-| `generate-service-configuration` | Generates the service configuration files for the workspace               |
-| `list-containers`                | Lists all running docker containers in the workspace                      |
-| `product-development`            | Configures the workspace for local product development                    |
-| `pull-images`                    | Pulls the docker images for created containers for the workspace          |
-| `pull-repositories`              | Pulls the latest changes from the repositories in the workspace           |
-| `start-docker-container`         | Starts a specific docker container in the workspace                       |
-| `local-cxc-dev`                  | Starts the local CXC development environment                              |
-| `stop-docker-services`           | Stops all running docker services in the workspace                        |
-| `switch-server`                  | Switches the server configuration in the workspace                        |
+| Use case name        | Description                                                     |
+| -------------------- | --------------------------------------------------------------- |
+| `check-requirements` | Checks the requirements for the workspace                       |
+| `clone-repositories` | Clones selected repositories into the workspace                 |
+| `list-containers`    | Lists all running docker containers in the workspace            |
+| `pull-repositories`  | Pulls the latest changes from the repositories in the workspace |
 
 The use cases are available by default and can be disabled via a template
 repository.
