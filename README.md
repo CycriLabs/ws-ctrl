@@ -178,7 +178,7 @@ that can be cloned into the workspace. The configuration files are located in
 the `config/repositories` directory. All files are automatically available for
 prompts.
 
-This [JSON Schema](https://gist.github.com/MarcScheib/eaed8888c0f47a4d52b7f938c70c2355#file-repository-json-schema-json) defines the structure of the repository configuration.
+This [JSON Schema](https://raw.githubusercontent.com/CycriLabs/ws-ctrl/refs/heads/main/schemas/repository.schema.json) defines the structure of the repository configuration.
 
 ### Server configuration
 
@@ -186,7 +186,7 @@ The server configuration files are used to configure the servers that can be
 used to run the platform against. The configuration files are located in the
 `config/servers` directory. All files are automatically available for prompts.
 
-This [JSON Schema](https://gist.github.com/MarcScheib/eaed8888c0f47a4d52b7f938c70c2355#file-server-schema-json) defines the structure of the server configuration.
+This [JSON Schema](https://raw.githubusercontent.com/CycriLabs/ws-ctrl/refs/heads/main/schemas/server.schema.json) defines the structure of the server configuration.
 
 ### Secret templates
 
@@ -248,7 +248,7 @@ and keywords to be correctly interpreted by the CLI utility. Like this, it is
 possible to easily configure and execute pretty much everything on the workspace
 configuration files.
 
-This [JSON schema](https://gist.githubusercontent.com/MarcScheib/eaed8888c0f47a4d52b7f938c70c2355/raw/8734e53ec76e085fcb559c3cdb394a5ea84e8ca0/use-case.schema.json) describes the structure of a use case. In the following, each
+This [JSON schema](https://raw.githubusercontent.com/CycriLabs/ws-ctrl/refs/heads/main/schemas/use-case.schema.json) describes the structure of a use case. In the following, each
 keyword is described and potential end-2-end usage examples are provided.
 
 A use case consists of the follow properties:
