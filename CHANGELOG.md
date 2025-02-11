@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/CycriLabs/ws-ctrl/compare/1.2.0...1.3.0) (2025-02-11)
+
+
+### Features
+
+* pass back context from called use-case in runner ([16bb8d7](https://github.com/CycriLabs/ws-ctrl/commit/16bb8d757a3156d96344191e42563aacb415dc82))
+
 # [1.2.0](https://github.com/CycriLabs/ws-ctrl/compare/1.1.0...1.2.0) (2025-02-11)
 
 
