@@ -231,8 +231,7 @@ export class UseCaseRunner {
     }
 
     logger.log(`Starting to run references use case...`);
-    await this.run(useCase, context);
-    return context;
+    return await this.run(useCase, context);
   }
 
   async #executeInErrorBoundary(
