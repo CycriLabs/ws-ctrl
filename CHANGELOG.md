@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/CycriLabs/ws-ctrl/compare/1.1.0...1.2.0) (2025-02-11)
+
+
+### Features
+
+* add catchErrors flag to use case steps ([6e67858](https://github.com/CycriLabs/ws-ctrl/commit/6e67858d08cecd4a80500633f047790b95f76962))
+
 # [1.1.0](https://github.com/CycriLabs/ws-ctrl/compare/1.0.0...1.1.0) (2025-02-08)
 
 
