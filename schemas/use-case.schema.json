@@ -43,6 +43,9 @@
         "skipIf": {
           "type": "string"
         },
+        "catchErrors": {
+          "type": "boolean"
+        },
         "useCase": {
           "type": "string"
         },

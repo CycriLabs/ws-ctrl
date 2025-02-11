@@ -164,12 +164,14 @@ export class UseCaseRunner {
       throw new Error('Formula missing in step.');
     }
 
-    const result = this.scriptExecutor.executeFormula(step.formula, context);
-    if (step.outputFile && typeof result === 'string') {
-      await writeFile(step.outputFile, result);
-    }
+    return await this.#executeInErrorBoundary(step, context, async () => {
+      const result = this.scriptExecutor.executeFormula(step.formula!, context);
+      if (step.outputFile && typeof result === 'string') {
+        await writeFile(step.outputFile, result);
+      }
 
-    return { ...context, [step.resultVariable || 'STEP_RESULT']: result };
+      return { ...context, [step.resultVariable || 'STEP_RESULT']: result };
+    });
   }
 
   async #executeTypeCommand(
@@ -180,12 +182,14 @@ export class UseCaseRunner {
       throw new Error('Command missing in step.');
     }
 
-    const command = this.scriptExecutor.executeFormula<string>(
-      step.command,
-      context
-    );
-    await execCommand(command, this.templatesAccess.getWorkspacePath());
-    return context;
+    return await this.#executeInErrorBoundary(step, context, async () => {
+      const command = this.scriptExecutor.executeFormula<string>(
+        step.command!,
+        context
+      );
+      await execCommand(command, this.templatesAccess.getWorkspacePath());
+      return context;
+    });
   }
 
   async #executeTypeExecutor(
@@ -229,5 +233,22 @@ export class UseCaseRunner {
     logger.log(`Starting to run references use case...`);
     await this.run(useCase, context);
     return context;
+  }
+
+  async #executeInErrorBoundary(
+    step: UseCaseStep,
+    context: Context,
+    callback: () => Promise<Context>
+  ): Promise<Context> {
+    try {
+      return await callback();
+    } catch (error: unknown) {
+      if (step.catchErrors) {
+        logger.error(`Error caught: ${(error as Error).message}. Continuing.`);
+        return context;
+      } else {
+        throw error;
+      }
+    }
   }
 }

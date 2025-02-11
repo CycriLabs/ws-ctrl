@@ -21,6 +21,7 @@
         "list": "repositories",
         "name": "repository"
       },
+      "catchErrors": true,
       "command": "`git clone -b develop ${repository.url} ${WORKING_DIR}/${repository.alias}`"
     }
   ]

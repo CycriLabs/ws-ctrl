@@ -279,6 +279,7 @@ Each step consists of the following properties:
 - `outputFile` (optional): the output file for the command; the output of the step is written to the file
 - `abortIf` (optional): a formula that is evaluated; if the formula is true, the use case is stopped
 - `skipIf` (optional): a formula that is evaluated; if the formula is true, the step is skipped
+- `catchErrors` (optional): a flag to catch errors; if set to `true`, errors are caught and the use case is not stopped; defaults to `false`
 - `useCase` (optional): the use case that is called; only used for `USE_CASE` steps
 - `formula` (optional): the formula that is executed; only used for `FORMULA` steps; a JavaScript formula that is executed in this step; executed via `eval`
 - `command` (optional): the command that is executed; only used for `COMMAND` steps; the command is executed via NodeJS `child_process.execSync`

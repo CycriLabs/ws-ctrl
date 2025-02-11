@@ -58,6 +58,13 @@ export interface UseCaseStep {
    */
   skipIf?: string;
   /**
+   * A flag to catch errors in the step. If set to true, the error is caught and
+   * the execution continues with the next step. If set to false, the error is
+   * thrown and the execution stops.
+   * Defaults to false.
+   */
+  catchErrors?: boolean;
+  /**
    * The use case to be executed. It is a reference to another use case.
    */
   useCase?: string;
