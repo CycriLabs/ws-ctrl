@@ -1,16 +1,10 @@
-name: DevSecOps - Release on push
+name: DevSecOps - Lint & Test on Pull Request
 
-on:
-  push:
-    branches:
-      - main
-      - master
-      - next
-      - next-major
-      - beta
-      - alpha
-      - '[0-9]+.[0-9]+.x'
-      - '[0-9]+.x'
+on: pull_request
+
+concurrency:
+  group: lint-test-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
 
 env:
   node-js-version: 22.x
@@ -18,7 +12,7 @@ env:
   author-email: marc.scheib@cycrilabs.com
 
 jobs:
-  release:
+  lint-and-test:
     runs-on: ubuntu-latest
     permissions:
       contents: write # to be able to publish a GitHub release
@@ -37,10 +31,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Release
-        run: npx --yes -p @semantic-release/changelog -p @semantic-release/git semantic-release
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GIT_AUTHOR_NAME: ${{ env.author-name }}
-          GIT_AUTHOR_EMAIL: ${{ env.author-email }}
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
