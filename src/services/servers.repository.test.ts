@@ -1,8 +1,8 @@
 import { vol } from 'memfs';
 import { temporaryDirectory } from 'tempy';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CONFIG, initConfig } from '../config.js';
-import { DefaultInjector, inject, Logger } from '../utils/index.js';
+import { Logger, TestBed } from '../utils/index.js';
 import { TemplatesAccess } from './access/templates-access.js';
 import { ServersRepository } from './servers.repository.js';
 
@@ -16,14 +16,21 @@ describe('ServersRepository', () => {
   beforeEach(() => {
     const config = initConfig(path, 'acme', null).store;
 
-    DefaultInjector.getInstance([
-      [CONFIG, { factory: () => config }],
-      [Logger, { factory: () => new Logger() }],
-      [TemplatesAccess, { factory: () => new TemplatesAccess() }],
-      [ServersRepository, { factory: () => new ServersRepository() }],
-    ]);
+    TestBed.configureTestingModule({
+      providers: [
+        [CONFIG, () => config],
+        [Logger, () => new Logger()],
+        [TemplatesAccess, () => new TemplatesAccess()],
+        [ServersRepository, () => new ServersRepository()],
+      ],
+    });
 
-    sut = inject(ServersRepository);
+    sut = TestBed.inject(ServersRepository);
+  });
+
+  afterEach(() => {
+    vol.reset();
+    TestBed.resetTestingModule();
   });
 
   it('should load servers; empty list', async () => {

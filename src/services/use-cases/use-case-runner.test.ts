@@ -3,7 +3,7 @@ import { temporaryDirectory } from 'tempy';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CONFIG, initConfig } from '../../config.js';
 import { UseCase } from '../../types/use-case.js';
-import { DefaultInjector, inject, Logger } from '../../utils/index.js';
+import { Logger, TestBed } from '../../utils/index.js';
 import { TemplatesAccess } from '../access/templates-access.js';
 import { RepositoriesRepository } from '../repositories.repository.js';
 import { ScriptExecutor } from '../script-executor.js';
@@ -23,24 +23,27 @@ describe('UseCaseRunner', () => {
   beforeEach(() => {
     const config = initConfig(path, 'acme', null).store;
 
-    DefaultInjector.getInstance([
-      [CONFIG, { factory: () => config }],
-      [Logger, { factory: () => new Logger() }],
-      [ScriptExecutor, { factory: () => new ScriptExecutor() }],
-      [TemplatesAccess, { factory: () => new TemplatesAccess() }],
-      [UseCasesRepository, { factory: () => new UseCasesRepository() }],
-      [ServersRepository, { factory: () => new ServersRepository() }],
-      [RepositoriesRepository, { factory: () => new RepositoriesRepository() }],
-      [ContextCreator, { factory: () => new ContextCreator() }],
-      [UseCaseRunner, { factory: () => new UseCaseRunner() }],
-    ]);
+    TestBed.configureTestingModule({
+      providers: [
+        [CONFIG, () => config],
+        [Logger, () => new Logger()],
+        [ScriptExecutor, () => new ScriptExecutor()],
+        [TemplatesAccess, () => new TemplatesAccess()],
+        [UseCasesRepository, () => new UseCasesRepository()],
+        [ServersRepository, () => new ServersRepository()],
+        [RepositoriesRepository, () => new RepositoriesRepository()],
+        [ContextCreator, () => new ContextCreator()],
+        [UseCaseRunner, () => new UseCaseRunner()],
+      ],
+    });
 
-    scriptExecutor = inject(ScriptExecutor);
-    sut = inject(UseCaseRunner);
+    scriptExecutor = TestBed.inject(ScriptExecutor);
+    sut = TestBed.inject(UseCaseRunner);
   });
 
   afterEach(() => {
     vol.reset();
+    TestBed.resetTestingModule();
   });
 
   describe('run', () => {
