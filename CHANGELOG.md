@@ -1,3 +1,14 @@
+# [1.4.0](https://github.com/CycriLabs/ws-ctrl/compare/1.3.0...1.4.0) (2025-04-26)
+
+
+### Features
+
+* add dependency injection utils ([f49624b](https://github.com/CycriLabs/ws-ctrl/commit/f49624bd18e72793bc57f1d6a69702ca06515725))
+* add error logging for missing workspace JSON file ([1d22962](https://github.com/CycriLabs/ws-ctrl/commit/1d2296291917653dd0e1eb95e3bc2a740925f05f))
+* bump dotenv to 16.5.0 ([703a908](https://github.com/CycriLabs/ws-ctrl/commit/703a90823b49003414a74f277471470170824429))
+* **run:** add debug mode to execute use cases on non-workspaces ([#3](https://github.com/CycriLabs/ws-ctrl/issues/3)) ([666ac15](https://github.com/CycriLabs/ws-ctrl/commit/666ac155074ae036a519e88b444a327fa9c957dc))
+* **run:** add OS variable to use case context ([#3](https://github.com/CycriLabs/ws-ctrl/issues/3)) ([b99844d](https://github.com/CycriLabs/ws-ctrl/commit/b99844d1fbb901feaeda8115724ed60e59787644))
+
 # [1.3.0](https://github.com/CycriLabs/ws-ctrl/compare/1.2.0...1.3.0) (2025-02-11)
 
 
