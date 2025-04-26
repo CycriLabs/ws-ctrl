@@ -1,10 +1,15 @@
 import { vol } from 'memfs';
 import { temporaryDirectory } from 'tempy';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { initConfig } from '../../config.js';
+import { CONFIG, initConfig } from '../../config.js';
 import { UseCase } from '../../types/use-case.js';
+import { DefaultInjector, inject, Logger } from '../../utils/index.js';
 import { TemplatesAccess } from '../access/templates-access.js';
+import { RepositoriesRepository } from '../repositories.repository.js';
 import { ScriptExecutor } from '../script-executor.js';
+import { ServersRepository } from '../servers.repository.js';
+import { UseCasesRepository } from '../use-cases.repository.js';
+import { ContextCreator } from './context-creator.js';
 import { UseCaseRunner } from './use-case-runner.js';
 
 vi.mock('node:fs');
@@ -18,8 +23,20 @@ describe('UseCaseRunner', () => {
   beforeEach(() => {
     const config = initConfig(path, 'acme', null).store;
 
-    scriptExecutor = ScriptExecutor.create();
-    sut = UseCaseRunner.create(TemplatesAccess.create(config), scriptExecutor);
+    DefaultInjector.getInstance([
+      [CONFIG, { factory: () => config }],
+      [Logger, { factory: () => new Logger() }],
+      [ScriptExecutor, { factory: () => new ScriptExecutor() }],
+      [TemplatesAccess, { factory: () => new TemplatesAccess() }],
+      [UseCasesRepository, { factory: () => new UseCasesRepository() }],
+      [ServersRepository, { factory: () => new ServersRepository() }],
+      [RepositoriesRepository, { factory: () => new RepositoriesRepository() }],
+      [ContextCreator, { factory: () => new ContextCreator() }],
+      [UseCaseRunner, { factory: () => new UseCaseRunner() }],
+    ]);
+
+    scriptExecutor = inject(ScriptExecutor);
+    sut = inject(UseCaseRunner);
   });
 
   afterEach(() => {

@@ -1,9 +1,10 @@
 import { Command, Option } from 'commander';
-import { loadWorkspaceConfig } from '../../config.js';
-import { TemplatesAccess, UseCaseRunner } from '../../services/index.js';
+import { CONFIG, loadWorkspaceConfig } from '../../config.js';
+import { UseCaseRunner } from '../../services/index.js';
 import { UseCasesRepository } from '../../services/use-cases.repository.js';
 import { promptEntitySelection } from '../../shared/entity-selection-prompt.js';
 import { OptionInput } from '../../shared/index.js';
+import { inject, Injector } from '../../utils/index.js';
 import { defaultWorkspacePathArgument } from '../arguments.js';
 
 const useCaseOption = new Option(
@@ -22,9 +23,10 @@ export async function runAction(
   options: RunActionOptions
 ) {
   const config = await loadWorkspaceConfig(workspacePathRaw, options.debug);
-  const templatesAccess = TemplatesAccess.create(config);
-  const useCaseRunner = UseCaseRunner.create(templatesAccess);
-  const useCaseRepository = UseCasesRepository.create(templatesAccess);
+  inject(Injector).register(CONFIG, () => config);
+
+  const useCaseRunner = inject(UseCaseRunner);
+  const useCaseRepository = inject(UseCasesRepository);
 
   const useCases = await useCaseRepository.loadUseCases('INITIAL');
   const useCase = await promptEntitySelection(

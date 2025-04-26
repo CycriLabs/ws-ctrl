@@ -1,6 +1,6 @@
 import { join } from 'node:path';
-import { Config } from '../../config.js';
-import { copyDirectory, gitUpdate, logger } from '../../utils/index.js';
+import { CONFIG } from '../../config.js';
+import { copyDirectory, gitUpdate, inject, Logger } from '../../utils/index.js';
 import {
   DIR_CONFIG,
   DIR_DEVELOPMENT,
@@ -19,11 +19,8 @@ enum Location {
 }
 
 export class TemplatesAccess {
-  static create(config: Config): TemplatesAccess {
-    return new TemplatesAccess(config);
-  }
-
-  constructor(private readonly config: Config) {}
+  logger = inject(Logger);
+  config = inject(CONFIG);
 
   getPackageTemplatesDir(): string {
     return join(this.#getBaseDir(Location.PACKAGE), DIR_TEMPLATES);
@@ -92,7 +89,7 @@ export class TemplatesAccess {
   async syncTemplates(): Promise<void> {
     // always sync the templates from the package
     const templatesDirPackage = this.getPackageTemplatesDir();
-    logger.log(`Syncing templates from ${templatesDirPackage}...`);
+    this.logger.log(`Syncing templates from ${templatesDirPackage}...`);
     await copyDirectory(templatesDirPackage, this.getWorkspacePath());
     // sync the templates from the repository
     await this.syncRepositoryTemplates();
@@ -103,7 +100,7 @@ export class TemplatesAccess {
     const templatesRepository = this.getTemplatesRepository();
     if (templatesRepository) {
       const url = this.createRepositoryUrl(templatesRepository);
-      logger.log(`Syncing templates from repository ${url}...`);
+      this.logger.log(`Syncing templates from repository ${url}...`);
 
       await gitUpdate(url, this.getWorkspacePath(), this.getGitTemplatesDir());
       await copyDirectory(this.getGitTemplatesDir(), this.getConfigDir(), [

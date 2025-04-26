@@ -1,23 +1,13 @@
 import { Context } from '../../types/index.js';
-import { OS } from '../../utils/index.js';
+import { inject, OS } from '../../utils/index.js';
 import { TemplatesAccess } from '../access/index.js';
 import { RepositoriesRepository } from '../repositories.repository.js';
 import { ServersRepository } from '../servers.repository.js';
 
 export class ContextCreator {
-  static create(templatesAccess: TemplatesAccess) {
-    return new ContextCreator(
-      templatesAccess,
-      ServersRepository.create(templatesAccess),
-      RepositoriesRepository.create(templatesAccess)
-    );
-  }
-
-  constructor(
-    private readonly templatesAccess: TemplatesAccess,
-    private readonly serversRepository: ServersRepository,
-    private readonly repositoriesRepository: RepositoriesRepository
-  ) {}
+  templatesAccess = inject(TemplatesAccess);
+  serversRepository = inject(ServersRepository);
+  repositoriesRepository = inject(RepositoriesRepository);
 
   async createContext(userContext: Context = {}): Promise<Context> {
     return {

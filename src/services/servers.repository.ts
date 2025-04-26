@@ -1,13 +1,9 @@
 import { Server } from '../types/index.js';
-import { loadFilesFromDirectory } from '../utils/index.js';
+import { inject, loadFilesFromDirectory } from '../utils/index.js';
 import { TemplatesAccess } from './access/index.js';
 
 export class ServersRepository {
-  static create(templatesAccess: TemplatesAccess) {
-    return new ServersRepository(templatesAccess);
-  }
-
-  constructor(private readonly templatesAccess: TemplatesAccess) {}
+  templatesAccess = inject(TemplatesAccess);
 
   async loadServers(): Promise<Server[]> {
     return this.loadFiles();

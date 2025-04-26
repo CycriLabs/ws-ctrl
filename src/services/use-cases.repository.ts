@@ -1,13 +1,9 @@
 import { UseCase, UseCaseState } from '../types/index.js';
-import { loadFilesFromDirectory } from '../utils/index.js';
+import { inject, loadFilesFromDirectory } from '../utils/index.js';
 import { TemplatesAccess } from './access/index.js';
 
 export class UseCasesRepository {
-  static create(templatesAccess: TemplatesAccess) {
-    return new UseCasesRepository(templatesAccess);
-  }
-
-  constructor(private readonly templatesAccess: TemplatesAccess) {}
+  templatesAccess = inject(TemplatesAccess);
 
   async loadUseCases(...exclude: UseCaseState[]): Promise<UseCase[]> {
     const stateExclusion: UseCaseState[] = ['DISABLED', ...exclude];

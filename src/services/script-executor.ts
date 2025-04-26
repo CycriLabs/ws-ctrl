@@ -1,10 +1,6 @@
 import { Context } from '../types/index.js';
 
 export class ScriptExecutor {
-  static create() {
-    return new ScriptExecutor();
-  }
-
   executeFormula<T = unknown>(formula: string, context: Context): T {
     try {
       const script = this.#prepareScriptExecution(formula, context);

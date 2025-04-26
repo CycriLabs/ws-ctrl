@@ -1,8 +1,10 @@
 import Conf from 'conf';
 import {
   getWorkspacePathIdentifier,
+  inject,
+  InjectionToken,
   isExistingWorkspace,
-  logger,
+  Logger,
   resolveWorkspacePath,
 } from './utils/index.js';
 
@@ -11,6 +13,8 @@ export interface Config {
   organization: string;
   templatesRepository: string | null;
 }
+
+export const CONFIG = new InjectionToken<Config>('Config');
 
 export type WorkspaceConfig = Conf<Config>;
 
@@ -63,7 +67,7 @@ export async function loadWorkspaceConfig(
 ): Promise<Config> {
   const workspacePath = workspacePathRaw.trim();
   if (debug) {
-    logger.log('Running within non-workspace directory...');
+    inject(Logger).log('Running within non-workspace directory...');
     return loadBlankConfig(workspacePath);
   }
 

@@ -1,7 +1,8 @@
 import { vol } from 'memfs';
 import { temporaryDirectory } from 'tempy';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { initConfig } from '../config.js';
+import { CONFIG, initConfig } from '../config.js';
+import { DefaultInjector, inject, Logger } from '../utils/index.js';
 import { TemplatesAccess } from './access/templates-access.js';
 import { UseCasesRepository } from './use-cases.repository.js';
 
@@ -15,7 +16,14 @@ describe('UseCasesRepository', () => {
   beforeEach(() => {
     const config = initConfig(path, 'acme', null).store;
 
-    sut = UseCasesRepository.create(TemplatesAccess.create(config));
+    DefaultInjector.getInstance([
+      [CONFIG, { factory: () => config }],
+      [Logger, { factory: () => new Logger() }],
+      [TemplatesAccess, { factory: () => new TemplatesAccess() }],
+      [UseCasesRepository, { factory: () => new UseCasesRepository() }],
+    ]);
+
+    sut = inject(UseCasesRepository);
   });
 
   it('should load use cases; empty list', async () => {

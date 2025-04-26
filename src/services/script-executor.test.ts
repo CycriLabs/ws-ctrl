@@ -1,11 +1,15 @@
 import { beforeEach, describe, expect, test } from 'vitest';
+import { DefaultInjector, inject } from '../utils/index.js';
 import { ScriptExecutor } from './script-executor.js';
 
 describe('ScriptExecutor', () => {
   let sut: ScriptExecutor;
 
   beforeEach(() => {
-    sut = ScriptExecutor.create();
+    DefaultInjector.getInstance([
+      [ScriptExecutor, { factory: () => new ScriptExecutor() }],
+    ]);
+    sut = inject(ScriptExecutor);
   });
 
   describe('executeFormula', () => {

@@ -2,7 +2,8 @@ import { Context, UseCase, UseCaseStep } from '../../types/index.js';
 import {
   bold,
   execCommand,
-  logger,
+  inject,
+  Logger,
   readFile,
   writeFile,
 } from '../../utils/index.js';
@@ -14,24 +15,11 @@ import { Executor } from './executor.js';
 import { executorMapping } from './executors/index.js';
 
 export class UseCaseRunner {
-  static create(
-    templatesAccess: TemplatesAccess,
-    scriptExecutor?: ScriptExecutor
-  ): UseCaseRunner {
-    return new UseCaseRunner(
-      templatesAccess,
-      UseCasesRepository.create(templatesAccess),
-      ContextCreator.create(templatesAccess),
-      scriptExecutor || ScriptExecutor.create()
-    );
-  }
-
-  constructor(
-    private readonly templatesAccess: TemplatesAccess,
-    private readonly useCasesRepository: UseCasesRepository,
-    private readonly contextCreator: ContextCreator,
-    private readonly scriptExecutor: ScriptExecutor
-  ) {}
+  logger = inject(Logger);
+  templatesAccess = inject(TemplatesAccess);
+  useCasesRepository = inject(UseCasesRepository);
+  contextCreator = inject(ContextCreator);
+  scriptExecutor = inject(ScriptExecutor);
 
   async run(
     useCase: UseCase | string,
@@ -54,13 +42,13 @@ export class UseCaseRunner {
     const { name, description, steps } = useCase;
     const runnerContext = await this.contextCreator.createContext(userContext);
 
-    logger.log(`Running use case ${bold(name)}...`);
+    this.logger.log(`Running use case ${bold(name)}...`);
     if (description) {
-      logger.log(`${description}`);
+      this.logger.log(`${description}`);
     }
 
     if (steps && steps.length !== 0) {
-      logger.log(`Executing steps...`);
+      this.logger.log(`Executing steps...`);
 
       return await this.#executeSteps(steps, runnerContext);
     }
@@ -74,7 +62,7 @@ export class UseCaseRunner {
     const stepsContext: Context = { ...context, STEPS: steps };
     for (let i = 0; i < steps.length; i++) {
       const step = steps[i];
-      logger.log(`Step ${i + 1}: ${step.description || ''}`);
+      this.logger.log(`Step ${i + 1}: ${step.description || ''}`);
 
       const updatedContext = await this.#executeStep(step, stepsContext);
       Object.assign(stepsContext, updatedContext);
@@ -107,7 +95,7 @@ export class UseCaseRunner {
       const skip = this.scriptExecutor.executeFormula(skipIf, stepContext);
 
       if (skip) {
-        logger.log(`Skipping step.`);
+        this.logger.log(`Skipping step.`);
         return stepContext;
       }
     }
@@ -228,7 +216,7 @@ export class UseCaseRunner {
       throw new Error(`Use case not found: ${step.useCase}`);
     }
 
-    logger.log(`Starting to run references use case...`);
+    this.logger.log(`Starting to run references use case...`);
     return await this.run(useCase, context);
   }
 
@@ -241,7 +229,9 @@ export class UseCaseRunner {
       return await callback();
     } catch (error: unknown) {
       if (step.catchErrors) {
-        logger.error(`Error caught: ${(error as Error).message}. Continuing.`);
+        this.logger.error(
+          `Error caught: ${(error as Error).message}. Continuing.`
+        );
         return context;
       } else {
         throw error;

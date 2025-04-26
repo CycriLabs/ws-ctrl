@@ -1,14 +1,17 @@
 import { Command } from 'commander';
-import { loadWorkspaceConfig } from '../../config.js';
+import { CONFIG, loadWorkspaceConfig } from '../../config.js';
 import { TemplatesAccess, UseCaseRunner } from '../../services/index.js';
+import { inject, Injector } from '../../utils/index.js';
 import { defaultWorkspacePathArgument } from '../arguments.js';
 
 async function syncAction(workspacePathRaw: string): Promise<void> {
   const config = await loadWorkspaceConfig(workspacePathRaw);
-  const templatesAccess = TemplatesAccess.create(config);
-  await templatesAccess.syncTemplates();
+  inject(Injector).register(CONFIG, () => config);
 
-  const useCaseRunner = UseCaseRunner.create(templatesAccess);
+  const templatesAccess = inject(TemplatesAccess);
+  const useCaseRunner = inject(UseCaseRunner);
+
+  await templatesAccess.syncTemplates();
   await useCaseRunner.run('sync');
 }
 

@@ -1,4 +1,5 @@
-import { initConfig } from '../../config.js';
+import { Command, Option } from 'commander';
+import { CONFIG, initConfig } from '../../config.js';
 import { TemplatesAccess, UseCaseRunner } from '../../services/index.js';
 import {
   hasUserInput,
@@ -7,9 +8,17 @@ import {
   promptTextInput,
 } from '../../shared/index.js';
 import {
+  inject,
+  Injector,
   isExistingWorkspace,
   resolveWorkspacePath,
 } from '../../utils/index.js';
+import { workspacePathArgument } from '../arguments.js';
+
+const templatesRepository = new Option(
+  '--templates-repository <templatesRepository>',
+  'use a template repository'
+);
 
 interface InitActionOptions {
   templatesRepository: OptionInput;
@@ -37,7 +46,7 @@ async function promptTemplateRepository(
     : null;
 }
 
-export async function init(
+export async function initAction(
   workspacePathRaw: string,
   options: InitActionOptions
 ): Promise<void> {
@@ -63,11 +72,19 @@ export async function init(
 
   // init config
   const config = initConfig(workspacePath, organization, templatesRepository);
+  inject(Injector).register(CONFIG, () => config.store);
 
   // copy templates from package/repo to workspace
-  const templatesAccess = TemplatesAccess.create(config.store);
+  const templatesAccess = inject(TemplatesAccess);
   await templatesAccess.initWorkspace();
 
-  const useCaseRunner = UseCaseRunner.create(templatesAccess);
+  const useCaseRunner = inject(UseCaseRunner);
   await useCaseRunner.run('init');
 }
+
+export const init = new Command()
+  .name('init')
+  .description('initialize the workspace')
+  .addArgument(workspacePathArgument)
+  .addOption(templatesRepository)
+  .action(initAction);

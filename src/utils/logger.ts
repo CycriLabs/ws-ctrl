@@ -1,7 +1,7 @@
 import { ChalkInstance } from 'chalk';
 import { green, red, yellow } from './colors.js';
 
-class Logger {
+export class Logger {
   log(message: string, color?: ChalkInstance) {
     const logMessage = color ? color(message) : message;
     console.log(logMessage);
@@ -19,5 +19,3 @@ class Logger {
     this.log(message, green);
   }
 }
-
-export const logger = new Logger();
