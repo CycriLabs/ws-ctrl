@@ -1,0 +1,53 @@
+name: DevSecOps - Lint & Test on Push
+
+on:
+  push:
+    branches:
+      - develop
+
+concurrency:
+  group: lint-test-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  node-js-version: 22.x
+  author-name: Marc Scheib
+  author-email: marc.scheib@cycrilabs.com
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to be able to publish a GitHub release
+
+    steps:
+      - name: Checkout [${{ github.head_ref || github.ref_name }}]
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Setup Node.js [${{ env.node-js-version }}]
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.node-js-version }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
