@@ -91,9 +91,10 @@ the top-level workspace directory.
 
 The following options are available:
 
-| Option                      | Description         |
-| --------------------------- | ------------------- |
-| `-u, --use-case [use-case]` | the use case to run |
+| Option                      | Description                                                                                         |
+| --------------------------- | --------------------------------------------------------------------------------------------------- |
+| `-u, --use-case [use-case]` | the use case to run                                                                                 |
+| `--debug`                   | enable debug mode; allows to run use cases from any location, assuming the config structure matches |
 
 For example, to run the `check-requirements` use case, execute:
 
@@ -394,4 +395,14 @@ After testing, the symlink can be removed via:
 
 ```bash
 npm uninstall ws-ctrl -g
+```
+
+### Use cases
+
+It is possible to test use cases directly in the workspace. To do so, the use case
+should be placed in the `assets/templates/config/use-cases` directory.
+The use case can then be executed via:
+
+```bash
+npm run dev -- run ./assets/templates -u <use-case-name> --debug
 ```

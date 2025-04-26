@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { WorkspaceConfig } from '../../config.js';
+import { Config } from '../../config.js';
 import { copyDirectory, gitUpdate, logger } from '../../utils/index.js';
 import {
   DIR_CONFIG,
@@ -19,11 +19,11 @@ enum Location {
 }
 
 export class TemplatesAccess {
-  static create(config: WorkspaceConfig): TemplatesAccess {
+  static create(config: Config): TemplatesAccess {
     return new TemplatesAccess(config);
   }
 
-  constructor(private readonly config: WorkspaceConfig) {}
+  constructor(private readonly config: Config) {}
 
   getPackageTemplatesDir(): string {
     return join(this.#getBaseDir(Location.PACKAGE), DIR_TEMPLATES);
@@ -68,19 +68,19 @@ export class TemplatesAccess {
   }
 
   getWorkspacePath(): string {
-    return this.config.get('workspacePath');
+    return this.config.workspacePath;
   }
 
   getTemplatesRepository(): string | null {
-    return this.config.get('templatesRepository');
+    return this.config.templatesRepository;
   }
 
-  createRepositoryUrl(organization: string, name: string): string {
+  createRepositoryUrl(name: string): string {
     // TODO:
     // - add support for HTTPS URLs when provided in config
     // - add support for different repository hosts
     // - add support for different tenants
-    return `git@bitbucket.org:${organization}/${name}.git`;
+    return `git@bitbucket.org:${this.config.organization}/${name}.git`;
   }
 
   async initWorkspace(): Promise<void> {
@@ -102,10 +102,7 @@ export class TemplatesAccess {
     // sync the templates from the repository if configured
     const templatesRepository = this.getTemplatesRepository();
     if (templatesRepository) {
-      const url = this.createRepositoryUrl(
-        this.config.get('organization'),
-        templatesRepository
-      );
+      const url = this.createRepositoryUrl(templatesRepository);
       logger.log(`Syncing templates from repository ${url}...`);
 
       await gitUpdate(url, this.getWorkspacePath(), this.getGitTemplatesDir());
