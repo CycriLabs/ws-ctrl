@@ -317,6 +317,7 @@ All steps are working with a context object that is empty initially. Whenever
 a use case starts, the context is filled with the following properties.
 Throughout execution, steps can add or modify properties in the context object.
 
+- `OS`: the operating system where the CLI is executed on; represents the result of [`process.platform`](https://nodejs.org/api/process.html#process_process_platform)
 - `WORKSPACE_PATH`: the absolute path to the workspace
 - `WORKING_DIR`: the absolute path to the working directory, see [Workspace structure](#workspace-structure)
 - `SERVERS`: the list of all servers, see [Server configuration](#server-configuration)

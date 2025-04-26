@@ -13,9 +13,9 @@ describe('RepositoriesRepository', () => {
   let sut: RepositoriesRepository;
 
   beforeEach(() => {
-    const config = initConfig(path, 'acme', null);
+    const config = initConfig(path, 'acme', null).store;
 
-    sut = RepositoriesRepository.create(config, TemplatesAccess.create(config));
+    sut = RepositoriesRepository.create(TemplatesAccess.create(config));
   });
 
   it('should load repositories; empty list', async () => {

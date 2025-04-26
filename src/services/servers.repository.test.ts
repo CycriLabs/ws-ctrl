@@ -13,7 +13,7 @@ describe('ServersRepository', () => {
   let sut: ServersRepository;
 
   beforeEach(() => {
-    const config = initConfig(path, 'acme', null);
+    const config = initConfig(path, 'acme', null).store;
 
     sut = ServersRepository.create(TemplatesAccess.create(config));
   });

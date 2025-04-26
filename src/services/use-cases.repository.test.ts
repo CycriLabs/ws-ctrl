@@ -13,7 +13,7 @@ describe('UseCasesRepository', () => {
   let sut: UseCasesRepository;
 
   beforeEach(() => {
-    const config = initConfig(path, 'acme', null);
+    const config = initConfig(path, 'acme', null).store;
 
     sut = UseCasesRepository.create(TemplatesAccess.create(config));
   });
