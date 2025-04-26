@@ -5,6 +5,11 @@
   "description": "This use case checks the requirements to develop locally.",
   "steps": [
     {
+      "type": "FORMULA",
+      "description": "Print OS info",
+      "formula": "console.log(`Running on ${OS}`)"
+    },
+    {
       "type": "COMMAND",
       "description": "Execute commands",
       "context": {

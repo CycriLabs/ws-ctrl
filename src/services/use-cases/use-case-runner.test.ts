@@ -16,14 +16,10 @@ describe('UseCaseRunner', () => {
   let sut: UseCaseRunner;
 
   beforeEach(() => {
-    const config = initConfig(path, 'acme', null);
+    const config = initConfig(path, 'acme', null).store;
 
     scriptExecutor = ScriptExecutor.create();
-    sut = UseCaseRunner.create(
-      config,
-      TemplatesAccess.create(config),
-      scriptExecutor
-    );
+    sut = UseCaseRunner.create(TemplatesAccess.create(config), scriptExecutor);
   });
 
   afterEach(() => {
