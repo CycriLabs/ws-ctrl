@@ -10,18 +10,20 @@ const useCaseOption = new Option(
   '-u, --use-case [use-case]',
   'execute the use case with the given name'
 );
+const debugOption = new Option('--debug', 'enable debug mode');
 
 interface RunActionOptions {
   useCase: OptionInput;
+  debug: boolean;
 }
 
 export async function runAction(
   workspacePathRaw: string,
   options: RunActionOptions
 ) {
-  const config = await loadWorkspaceConfig(workspacePathRaw);
+  const config = await loadWorkspaceConfig(workspacePathRaw, options.debug);
   const templatesAccess = TemplatesAccess.create(config);
-  const useCaseRunner = UseCaseRunner.create(config, templatesAccess);
+  const useCaseRunner = UseCaseRunner.create(templatesAccess);
   const useCaseRepository = UseCasesRepository.create(templatesAccess);
 
   const useCases = await useCaseRepository.loadUseCases('INITIAL');
@@ -43,4 +45,5 @@ export const run = new Command()
   .description('run a use case in the workspace')
   .addArgument(defaultWorkspacePathArgument)
   .addOption(useCaseOption)
+  .addOption(debugOption)
   .action(runAction);

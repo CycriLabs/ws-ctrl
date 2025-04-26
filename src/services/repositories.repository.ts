@@ -1,17 +1,13 @@
-import { WorkspaceConfig } from '../config.js';
 import { Repository } from '../types/index.js';
 import { loadFilesFromDirectory } from '../utils/index.js';
 import { TemplatesAccess } from './access/index.js';
 
 export class RepositoriesRepository {
-  static create(config: WorkspaceConfig, templatesAccess: TemplatesAccess) {
-    return new RepositoriesRepository(config, templatesAccess);
+  static create(templatesAccess: TemplatesAccess) {
+    return new RepositoriesRepository(templatesAccess);
   }
 
-  constructor(
-    private readonly config: WorkspaceConfig,
-    private readonly templatesAccess: TemplatesAccess
-  ) {}
+  constructor(private readonly templatesAccess: TemplatesAccess) {}
 
   async loadRepositories(): Promise<Required<Repository>[]> {
     return this.loadFiles().then(repositories =>
@@ -31,10 +27,7 @@ export class RepositoriesRepository {
       alias: repository.alias || repository.name,
       url:
         repository.url ||
-        this.templatesAccess.createRepositoryUrl(
-          this.config.get('organization'),
-          repository.name
-        ),
+        this.templatesAccess.createRepositoryUrl(repository.name),
       attributes: {
         type: 'UNKNOWN',
         ...repository.attributes,

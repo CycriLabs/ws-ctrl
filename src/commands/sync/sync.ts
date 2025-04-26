@@ -8,7 +8,7 @@ async function syncAction(workspacePathRaw: string): Promise<void> {
   const templatesAccess = TemplatesAccess.create(config);
   await templatesAccess.syncTemplates();
 
-  const useCaseRunner = UseCaseRunner.create(config, templatesAccess);
+  const useCaseRunner = UseCaseRunner.create(templatesAccess);
   await useCaseRunner.run('sync');
 }
 

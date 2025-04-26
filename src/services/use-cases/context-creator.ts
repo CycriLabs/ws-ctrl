@@ -1,15 +1,14 @@
-import { WorkspaceConfig } from '../../config.js';
 import { Context } from '../../types/index.js';
 import { TemplatesAccess } from '../access/index.js';
 import { RepositoriesRepository } from '../repositories.repository.js';
 import { ServersRepository } from '../servers.repository.js';
 
 export class ContextCreator {
-  static create(config: WorkspaceConfig, templatesAccess: TemplatesAccess) {
+  static create(templatesAccess: TemplatesAccess) {
     return new ContextCreator(
       templatesAccess,
       ServersRepository.create(templatesAccess),
-      RepositoriesRepository.create(config, templatesAccess)
+      RepositoriesRepository.create(templatesAccess)
     );
   }
 

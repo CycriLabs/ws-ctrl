@@ -65,9 +65,9 @@ export async function init(
   const config = initConfig(workspacePath, organization, templatesRepository);
 
   // copy templates from package/repo to workspace
-  const templatesAccess = TemplatesAccess.create(config);
+  const templatesAccess = TemplatesAccess.create(config.store);
   await templatesAccess.initWorkspace();
 
-  const useCaseRunner = UseCaseRunner.create(config, templatesAccess);
+  const useCaseRunner = UseCaseRunner.create(templatesAccess);
   await useCaseRunner.run('init');
 }

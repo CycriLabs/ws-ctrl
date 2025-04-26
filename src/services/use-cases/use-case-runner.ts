@@ -1,4 +1,3 @@
-import { WorkspaceConfig } from '../../config.js';
 import { Context, UseCase, UseCaseStep } from '../../types/index.js';
 import {
   bold,
@@ -16,14 +15,13 @@ import { executorMapping } from './executors/index.js';
 
 export class UseCaseRunner {
   static create(
-    config: WorkspaceConfig,
     templatesAccess: TemplatesAccess,
     scriptExecutor?: ScriptExecutor
   ): UseCaseRunner {
     return new UseCaseRunner(
       templatesAccess,
       UseCasesRepository.create(templatesAccess),
-      ContextCreator.create(config, templatesAccess),
+      ContextCreator.create(templatesAccess),
       scriptExecutor || ScriptExecutor.create()
     );
   }
