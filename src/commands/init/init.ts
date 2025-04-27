@@ -72,7 +72,10 @@ export async function initAction(
 
   // init config
   const config = initConfig(workspacePath, organization, templatesRepository);
-  inject(Injector).register(CONFIG, () => config.store);
+  inject(Injector).register({
+    provide: CONFIG,
+    useFactory: () => config.store,
+  });
 
   // copy templates from package/repo to workspace
   const templatesAccess = inject(TemplatesAccess);

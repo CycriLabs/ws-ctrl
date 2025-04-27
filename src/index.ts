@@ -11,7 +11,9 @@ import { RepositoriesRepository } from './services/repositories.repository.js';
 import { ScriptExecutor } from './services/script-executor.js';
 import { ServersRepository } from './services/servers.repository.js';
 import { ContextCreator } from './services/use-cases/context-creator.js';
-import { DefaultInjector, inject, Logger } from './utils/index.js';
+import { createInjector } from './utils/di/create-injector.js';
+import { setInjectImplementation } from './utils/di/di.js';
+import { inject, Logger } from './utils/index.js';
 
 const handleSigTerm = () => process.exit(0);
 process.on('SIGINT', handleSigTerm);
@@ -21,16 +23,17 @@ process.on('uncaughtException', err => {
   process.exit(1);
 });
 
-DefaultInjector.getInstance([
-  [Logger, { factory: () => new Logger() }],
-  [ScriptExecutor, { factory: () => new ScriptExecutor() }],
-  [TemplatesAccess, { factory: () => new TemplatesAccess() }],
-  [RepositoriesRepository, { factory: () => new RepositoriesRepository() }],
-  [ServersRepository, { factory: () => new ServersRepository() }],
-  [UseCasesRepository, { factory: () => new UseCasesRepository() }],
-  [ContextCreator, { factory: () => new ContextCreator() }],
-  [UseCaseRunner, { factory: () => new UseCaseRunner() }],
+const injector = createInjector([
+  Logger,
+  ScriptExecutor,
+  TemplatesAccess,
+  RepositoriesRepository,
+  ServersRepository,
+  UseCasesRepository,
+  ContextCreator,
+  UseCaseRunner,
 ]);
+setInjectImplementation(injector);
 
 new Command()
   .name(packageJson.name)

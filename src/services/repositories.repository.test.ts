@@ -18,10 +18,13 @@ describe('RepositoriesRepository', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        [CONFIG, () => config],
-        [Logger, () => new Logger()],
-        [TemplatesAccess, () => new TemplatesAccess()],
-        [RepositoriesRepository, () => new RepositoriesRepository()],
+        {
+          provide: CONFIG,
+          useFactory: () => config,
+        },
+        Logger,
+        TemplatesAccess,
+        RepositoriesRepository,
       ],
     });
 

@@ -14,7 +14,8 @@ describe('DefaultInjector', () => {
   let sut: Injector;
 
   beforeEach(() => {
-    sut = DefaultInjector.getInstance([]);
+    sut = new DefaultInjector([]);
+    setInjectImplementation(sut);
   });
 
   afterEach(() => {
@@ -28,7 +29,7 @@ describe('DefaultInjector', () => {
   });
 
   test('should register and get a token', () => {
-    sut.register(TestService, () => new TestService());
+    sut.register(TestService);
 
     const service = sut.get(TestService);
 
@@ -36,16 +37,16 @@ describe('DefaultInjector', () => {
   });
 
   test('should error, token already registered', () => {
-    sut.register(TestService, () => new TestService());
+    sut.register(TestService);
 
-    expect(() =>
-      sut.register(TestService, () => new TestService())
-    ).toThrowError('Token TestService already registered.');
+    expect(() => sut.register(TestService)).toThrowError(
+      'Token TestService already registered.'
+    );
   });
 
   test('should get a token with dependencies', () => {
-    sut.register(TestService, () => new TestService());
-    sut.register(NestedService, () => new NestedService());
+    sut.register(TestService);
+    sut.register(NestedService);
 
     const service = sut.get(NestedService);
 

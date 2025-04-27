@@ -25,15 +25,18 @@ describe('UseCaseRunner', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        [CONFIG, () => config],
-        [Logger, () => new Logger()],
-        [ScriptExecutor, () => new ScriptExecutor()],
-        [TemplatesAccess, () => new TemplatesAccess()],
-        [UseCasesRepository, () => new UseCasesRepository()],
-        [ServersRepository, () => new ServersRepository()],
-        [RepositoriesRepository, () => new RepositoriesRepository()],
-        [ContextCreator, () => new ContextCreator()],
-        [UseCaseRunner, () => new UseCaseRunner()],
+        {
+          provide: CONFIG,
+          useFactory: () => config,
+        },
+        Logger,
+        ScriptExecutor,
+        TemplatesAccess,
+        UseCasesRepository,
+        ServersRepository,
+        RepositoriesRepository,
+        ContextCreator,
+        UseCaseRunner,
       ],
     });
 

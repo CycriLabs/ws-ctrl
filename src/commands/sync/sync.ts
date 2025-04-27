@@ -6,7 +6,10 @@ import { defaultWorkspacePathArgument } from '../arguments.js';
 
 async function syncAction(workspacePathRaw: string): Promise<void> {
   const config = await loadWorkspaceConfig(workspacePathRaw);
-  inject(Injector).register(CONFIG, () => config);
+  inject(Injector).register({
+    provide: CONFIG,
+    useFactory: () => config,
+  });
 
   const templatesAccess = inject(TemplatesAccess);
   const useCaseRunner = inject(UseCaseRunner);

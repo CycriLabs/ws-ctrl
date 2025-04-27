@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from 'vitest';
-import { DefaultInjector } from './default-injector.js';
+import { createInjector } from './create-injector.js';
 import { setInjectImplementation } from './di.js';
 import { inject } from './inject.js';
 
@@ -17,7 +17,7 @@ describe('inject()', () => {
   });
 
   test('should error, token not defined', () => {
-    setInjectImplementation(DefaultInjector.getInstance([]));
+    setInjectImplementation(createInjector([]));
 
     expect(() => inject(TestService)).toThrowError(
       'Could not find the token TestService'
@@ -25,11 +25,7 @@ describe('inject()', () => {
   });
 
   test('should get a token', () => {
-    setInjectImplementation(
-      DefaultInjector.getInstance([
-        [TestService, { factory: () => new TestService() }],
-      ])
-    );
+    setInjectImplementation(createInjector([TestService]));
 
     const service = inject(TestService);
 

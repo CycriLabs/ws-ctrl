@@ -1,13 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-function-type */
-
-export interface AbstractType<T> extends Function {
-  prototype: T;
-}
-
-export interface Type<T> extends Function {
-  new (...args: any[]): T;
-}
+import { AbstractType, Provider, Type } from './providers.js';
 
 export class InjectionToken<T> {
   constructor(
@@ -30,7 +21,7 @@ export class InjectionToken<T> {
 export type ProviderToken<T> = Type<T> | AbstractType<T> | InjectionToken<T>;
 
 export abstract class Injector {
-  abstract register<T>(token: ProviderToken<T>, factory: () => T): void;
+  abstract register(provider: Provider): void;
 
   abstract get<T>(token: ProviderToken<T>): T;
 }

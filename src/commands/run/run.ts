@@ -23,7 +23,10 @@ export async function runAction(
   options: RunActionOptions
 ) {
   const config = await loadWorkspaceConfig(workspacePathRaw, options.debug);
-  inject(Injector).register(CONFIG, () => config);
+  inject(Injector).register({
+    provide: CONFIG,
+    useFactory: () => config,
+  });
 
   const useCaseRunner = inject(UseCaseRunner);
   const useCaseRepository = inject(UseCasesRepository);

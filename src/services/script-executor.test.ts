@@ -7,7 +7,7 @@ describe('ScriptExecutor', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [[ScriptExecutor, () => new ScriptExecutor()]],
+      providers: [ScriptExecutor],
     });
 
     sut = TestBed.inject(ScriptExecutor);
