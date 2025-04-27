@@ -1,4 +1,5 @@
 import { DefaultInjector } from './default-injector.js';
+import { setInjectImplementation } from './di.js';
 import { inject } from './index.js';
 import { ProviderToken } from './interfaces.js';
 
@@ -8,7 +9,7 @@ export declare interface TestModuleMetadata {
 
 export class TestBed {
   static configureTestingModule(moduleDef: TestModuleMetadata): void {
-    DefaultInjector.getInstance([]);
+    setInjectImplementation(DefaultInjector.getInstance([]));
 
     if (moduleDef.providers?.length) {
       moduleDef.providers.forEach(provider => {
@@ -18,9 +19,7 @@ export class TestBed {
   }
 
   static resetTestingModule(): void {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    DefaultInjector.instance = null as unknown as DefaultInjector;
+    setInjectImplementation(undefined);
   }
 
   static inject<T>(token: ProviderToken<T>) {

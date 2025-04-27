@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { DefaultInjector } from './default-injector.js';
+import { setInjectImplementation } from './di.js';
 import { inject } from './inject.js';
 import { Injector } from './interfaces.js';
 
@@ -17,10 +18,7 @@ describe('DefaultInjector', () => {
   });
 
   afterEach(() => {
-    sut = null as unknown as Injector;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    DefaultInjector.instance = null as unknown as DefaultInjector;
+    setInjectImplementation(undefined);
   });
 
   test('should error, token not defined', () => {

@@ -1,4 +1,5 @@
 import { stringify } from '../stringify.js';
+import { getInjectImplementation, setInjectImplementation } from './di.js';
 import { Injector, ProviderToken } from './interfaces.js';
 
 export type Record = {
@@ -7,19 +8,19 @@ export type Record = {
 };
 
 export class DefaultInjector extends Injector {
-  private static instance: DefaultInjector | null = null;
-
   static getInstance(
     providers?: Array<[ProviderToken<unknown>, Record]>
   ): Injector {
-    if (!this.instance && !providers) {
+    let instance = getInjectImplementation();
+    if (!instance && !providers) {
       throw new Error('Injector not initialized. Please provide providers.');
     }
 
-    if (!this.instance) {
-      this.instance = new DefaultInjector(providers || []);
+    if (!instance) {
+      instance = new DefaultInjector(providers || []);
+      setInjectImplementation(instance);
     }
-    return this.instance;
+    return instance;
   }
 
   private records: Map<ProviderToken<unknown>, Record | null>;
