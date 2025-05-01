@@ -39,9 +39,6 @@ export async function isExistingWorkspace(workspacePath: string) {
   try {
     await access(workspacePath);
   } catch {
-    inject(Logger).error(
-      'The provided workspacePath "' + workspacePath + '" does not exist.'
-    );
     return false;
   }
 
