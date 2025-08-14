@@ -275,7 +275,7 @@ Each step consists of the following properties:
 
 - `type`: the type of the step; can be one of the following
   - `FORMULA`: a JavaScript formula that is executed in this step; executed via `eval`
-  - `COMMAND`: execute a command; the command is executed via NodeJS `child_process.execSync`
+  - `COMMAND`: execute a command; the command is executed via NodeJS `child_process.execSync`; if used in combination with `resultVariable` command output is captured
   - `EXECUTOR`: a special step that is connected to some build-in executor; see [Available executors](#available-executors)
   - `USE_CASE`: call another use case
   - `PROMPT`: trigger a prompt for user input

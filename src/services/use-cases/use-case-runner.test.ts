@@ -3,6 +3,7 @@ import { temporaryDirectory } from 'tempy';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CONFIG, initConfig } from '../../config.js';
 import { UseCase } from '../../types/use-case.js';
+import * as utils from '../../utils/index.js';
 import { Logger, TestBed } from '../../utils/index.js';
 import { TemplatesAccess } from '../access/templates-access.js';
 import { RepositoriesRepository } from '../repositories.repository.js';
@@ -172,6 +173,43 @@ describe('UseCaseRunner', () => {
 
       expect(spy).toHaveBeenCalledWith('true', expect.any(Object));
       expect(spy).not.toHaveBeenCalledWith('a === b', expect.any(Object));
+    });
+
+    describe('type COMMAND', () => {
+      it('should not capture output unless resultVariable is set', async () => {
+        const spy = vi
+          .spyOn(utils, 'execCommand')
+          .mockReturnValue(Promise.resolve(''));
+
+        useCase.steps = [
+          {
+            type: 'COMMAND',
+            command: '`do stuff`',
+          },
+        ];
+
+        await sut.run(useCase);
+
+        expect(spy).toHaveBeenCalledWith('do stuff', expect.any(String), false);
+      });
+
+      it('should capture the output if resultVariable is set', async () => {
+        const spy = vi
+          .spyOn(utils, 'execCommand')
+          .mockReturnValue(Promise.resolve('hello world'));
+        useCase.steps = [
+          {
+            type: 'COMMAND',
+            command: '`do stuff`',
+            resultVariable: 'myVar',
+          },
+        ];
+
+        const context = await sut.run(useCase);
+
+        expect(spy).toHaveBeenCalledWith('do stuff', expect.any(String), true);
+        expect(context.myVar).toBe('hello world');
+      });
     });
 
     describe('type FORMULA', () => {

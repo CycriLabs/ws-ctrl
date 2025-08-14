@@ -173,7 +173,16 @@ export class UseCaseRunner {
         step.command!,
         context
       );
-      await execCommand(command, this.templatesAccess.getWorkspacePath());
+      const result = await execCommand(
+        command,
+        this.templatesAccess.getWorkspacePath(),
+        !!step.resultVariable
+      );
+
+      if (step.resultVariable) {
+        return { ...context, [step.resultVariable]: result };
+      }
+
       return context;
     });
   }
