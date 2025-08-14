@@ -1,3 +1,16 @@
+# [1.5.0](https://github.com/CycriLabs/ws-ctrl/compare/1.4.0...1.5.0) (2025-08-14)
+
+
+### Bug Fixes
+
+* remove logging from workspace check on missing directory ([#5](https://github.com/CycriLabs/ws-ctrl/issues/5)) ([fefed0e](https://github.com/CycriLabs/ws-ctrl/commit/fefed0ed31039fabf0af57e9eff748622f1c697f))
+
+
+### Features
+
+* add support for WORKSPACE_DIR & WORKING_DIR to keycloak configurator call ([#10](https://github.com/CycriLabs/ws-ctrl/issues/10)) ([c046e24](https://github.com/CycriLabs/ws-ctrl/commit/c046e24d4a5aac53c0347da3a6005c8636d5f3bc))
+* introduce providers to DI ([3b2f18b](https://github.com/CycriLabs/ws-ctrl/commit/3b2f18b445064ded0c3563a493c1abc04b36c3fd))
+
 # [1.4.0](https://github.com/CycriLabs/ws-ctrl/compare/1.3.0...1.4.0) (2025-04-26)
 
 
