@@ -27,6 +27,8 @@ export class GenerateServiceConfiguration extends Executor {
     const command = `docker run \
         --pull=always \
         --env-file ${pwd}/.env \
+        --env KCC_WORKSPACE_PATH=${this.templatesAccess.getWorkspacePath()} \
+        --env KCC_WORKING_DIR=${this.templatesAccess.getWorkingDir()} \
         --mount type=bind,src="${pwd}/config/secret-templates",target="/secret-templates,readonly" \
         --mount type=bind,src="${pwd}/config/services-config",target="/output" \
         --rm -i ghcr.io/cycrilabs/keycloak-configurator:${kcVersion} export-secrets -s ${authServerUrl} -u ${authUser} -p "${authPassword}" -r ${authTenant} -c //secret-templates -o //output`;

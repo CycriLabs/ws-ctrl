@@ -191,13 +191,20 @@ This [JSON Schema](https://raw.githubusercontent.com/CycriLabs/ws-ctrl/refs/head
 
 ### Secret templates
 
-The secret templates are used to configure the secrets that are necessary for all services
-running locally to connect to the remote Keycloak and other services. In addition,
-they container environment variables specific to each service. The secret templates
+The secret templates are used to provide the secrets that are necessary for all services
+running locally to connect to Keycloak or other services. In addition,
+they can contain environment variables specific to each service. The secret templates
 are located in the `config/secret-templates` directory.
 
 The secret templates are based on the [Keycloak Configurator](https://github.com/CycriLabs/keycloak-configurator).
 For more details, check the [documentation](https://github.com/CycriLabs/keycloak-configurator?tab=readme-ov-file#sub-command-export-secrets).
+
+If secret templates are the input for the `generate-service-configuration` executor,
+then, the [Keycloak Configurator](https://github.com/CycriLabs/keycloak-configurator) gets
+the `.env` file as input as well as additionally the following variables:
+
+- `KCC_WORKSPACE_PATH`: The absolute path to the workspace directory.
+- `KCC_WORKING_DIR`: The absolute path to the working directory.
 
 ## Use cases
 
