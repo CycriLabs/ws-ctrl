@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/CycriLabs/ws-ctrl/compare/1.5.0...1.6.0) (2025-08-15)
+
+
+### Features
+
+* allow to capture command output to variable ([eca1175](https://github.com/CycriLabs/ws-ctrl/commit/eca1175b0ecae258a91d94a7332d73b796d8be9c))
+* bump chalk to 5.5.0 ([6b88535](https://github.com/CycriLabs/ws-ctrl/commit/6b885354f36848ec2984d8e981626a89c0812aa4))
+* bump commander to 14.0.0 ([ed78cd6](https://github.com/CycriLabs/ws-ctrl/commit/ed78cd6389dbcdda69486ed27f1e5ca10790c674))
+* bump conf to 14.0.0 ([b335074](https://github.com/CycriLabs/ws-ctrl/commit/b335074c8fe0c7ff0f32d1b55108343e0194f824))
+* bump dotenv to 17.2.1 ([38f30bb](https://github.com/CycriLabs/ws-ctrl/commit/38f30bb086ec2c0c134f44b483a34441b34b993b))
+* bump typescript to 5.9.2 ([1b425c1](https://github.com/CycriLabs/ws-ctrl/commit/1b425c100315de8909156fa76db2c9af0bb41d3c))
+
 # [1.5.0](https://github.com/CycriLabs/ws-ctrl/compare/1.4.0...1.5.0) (2025-08-14)
 
 
