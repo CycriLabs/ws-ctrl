@@ -5,17 +5,31 @@ const SHELLS = ['bash', 'zsh', 'fish'] as const;
 type Shell = (typeof SHELLS)[number];
 
 /**
- * Prints the ids of the use cases selectable via `run -u`, read directly from
- * `config/use-cases` of the workspace given as first argument. Runs on every
- * tab press, so it stays a plain node call instead of going through npx.
- * A leading ~ is expanded here, since the shells pass the typed word as is.
+ * Prints the ids of the use cases selectable via `run -u` that start with the
+ * prefix given as first argument, one per line. The remaining arguments are
+ * the words typed after `run`; like `run`, it takes the workspace from the
+ * first positional one (default: the current directory) and reads its
+ * `config/use-cases`. A leading `~` or `~/` is expanded here, since the
+ * shells pass the typed word as is.
+ * Runs on every tab press, so it stays a plain node call instead of going
+ * through npx. The rules mirror `UseCasesRepository` (DISABLED, plus INITIAL
+ * and HIDDEN as `run` hides them) and `loadFilesFromDirectory` (.json in any
+ * case); keep them in sync.
  * Contains no single quotes, so it can be single-quoted in every shell.
  */
-const listUseCasesJs = `const fs = require("fs"), path = require("path"), dir = path.join(process.argv[1].replace(/^~/, require("os").homedir()), "config", "use-cases");
-for (const file of fs.readdirSync(dir).filter(file => file.endsWith(".json"))) {
+const listUseCasesJs = `const fs = require("fs"), path = require("path"), os = require("os");
+const [prefix, ...words] = process.argv.slice(1);
+let workspace = ".";
+for (let i = 0; i < words.length; i++) {
+  if (words[i] === "-u" || words[i] === "--use-case") i += words[i + 1] === "=" ? 2 : 1;
+  else if (!words[i].startsWith("-") && words[i] !== "=") { workspace = words[i]; break; }
+}
+const dir = path.join(workspace.replace(/^~(?=\\/|$)/, os.homedir()), "config", "use-cases");
+for (const file of fs.readdirSync(dir)) {
+  if (path.extname(file).toLowerCase() !== ".json") continue;
   try {
     const useCase = JSON.parse(fs.readFileSync(path.join(dir, file), "utf8"));
-    if (!["DISABLED", "INITIAL", "HIDDEN"].includes(useCase.state)) console.log(useCase.id);
+    if (!["DISABLED", "INITIAL", "HIDDEN"].includes(useCase.state) && String(useCase.id).startsWith(prefix)) console.log(useCase.id);
   } catch {}
 }`;
 
@@ -45,8 +59,14 @@ autoload -U +X bashcompinit && bashcompinit
 
   return `# tab completion for the workspace cli.sh, created by: cli.sh completion ${shell}
 ${shell === 'zsh' ? zshPrelude : ''}
+# $1: prefix the ids must start with, $2: prepended to each id; one id per
+# line, so ids are never expanded by the shell
 _ws_ctrl_use_cases() {
-  node -e '${listUseCasesJs}' "$1" 2>/dev/null
+  local id
+  COMPREPLY=()
+  while IFS= read -r id; do
+    COMPREPLY+=("$2$id")
+  done < <(node -e '${listUseCasesJs}' -- "$1" "\${COMP_WORDS[@]:2:$((COMP_CWORD-2))}" 2>/dev/null)
 }
 
 _ws_ctrl_cli() {
@@ -55,9 +75,20 @@ _ws_ctrl_cli() {
     COMPREPLY=($(compgen -W "${commandNames(program).join(' ')}" -- "$cur"))
     return
   fi
+  # bash splits --use-case=<id> at the =, zsh keeps it as one word
   case "$prev" in
     ${USE_CASE_FLAGS.join('|')})
-      COMPREPLY=($(compgen -W "$(_ws_ctrl_use_cases "$(dirname -- "\${COMP_WORDS[0]}")")" -- "$cur"))
+      if [ "$cur" = "=" ]; then _ws_ctrl_use_cases ""; else _ws_ctrl_use_cases "$cur"; fi
+      return ;;
+    =)
+      if [ "\${COMP_WORDS[COMP_CWORD-2]}" = "--use-case" ]; then
+        _ws_ctrl_use_cases "$cur"
+        return
+      fi ;;
+  esac
+  case "$cur" in
+    --use-case=*)
+      _ws_ctrl_use_cases "\${cur#--use-case=}" "--use-case="
       return ;;
   esac
   case "\${COMP_WORDS[1]}" in
@@ -66,7 +97,7 @@ ${words.join('\n')}
   COMPREPLY=($(compgen -W "$words" -- "$cur"))
 }
 
-complete -F _ws_ctrl_cli cli.sh ./cli.sh
+complete -o default -F _ws_ctrl_cli cli.sh ./cli.sh
 `;
 }
 
@@ -76,7 +107,7 @@ function createFishScript(program: Command): string {
     `complete $target -n __fish_use_subcommand -a "${commandNames(program).join(' ')}"`,
   ];
   for (const command of program.commands) {
-    const condition = `-n "__fish_seen_subcommand_from ${command.name()}"`;
+    const condition = `-n "__ws_ctrl_subcommand_is ${command.name()}"`;
     for (const option of command.options) {
       const flags = [
         option.short && `-s ${option.short.slice(1)}`,
@@ -99,8 +130,14 @@ function createFishScript(program: Command): string {
 
   return `# tab completion for the workspace cli.sh, created by: cli.sh completion fish
 
+function __ws_ctrl_subcommand_is
+    set -l words (commandline -opc)
+    test "$words[2]" = "$argv[1]"
+end
+
+# fish filters by the typed prefix itself
 function __ws_ctrl_use_cases
-    node -e '${listUseCasesJs}' (dirname -- (commandline -opc)[1]) 2>/dev/null
+    node -e '${listUseCasesJs}' -- "" (commandline -opc)[3..-1] 2>/dev/null
 end
 
 for target in "-c cli.sh" "-p */cli.sh"

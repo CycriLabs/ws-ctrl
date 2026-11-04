@@ -35,6 +35,8 @@ const injector = createInjector([
 ]);
 setInjectImplementation(injector);
 
+let actionCommand: Command | undefined;
+
 new Command()
   .name(packageJson.name)
   .description(packageJson.description)
@@ -43,14 +45,17 @@ new Command()
   .addCommand(run)
   .addCommand(sync)
   .addCommand(completion)
+  .hook('preAction', (_, command) => {
+    actionCommand = command;
+  })
   .parseAsync()
   .catch(err => {
     inject(Logger).error(err.message);
     process.exit(1);
   })
   .finally(() => {
-    // the completion script is printed to stdout, so it must stay clean
-    if (process.argv[2] !== 'completion') {
+    // completion prints its script to stdout, so it opts out of the banner
+    if (actionCommand !== completion) {
       inject(Logger).success('Finished execution.');
     }
   });

@@ -124,9 +124,10 @@ For more details, see the [Template repository](#template-repository) section.
 
 The `completion` command prints a tab completion script for the `cli.sh` of a
 workspace. It completes the commands, their options and the use case ids for
-`run -u`. The use case ids are read from the `config/use-cases` directory next
-to the `cli.sh` on every tab press, so new use cases are available right away.
-Disabled, hidden and initial use cases are not offered.
+`run -u`. Like `run`, it reads the use case ids from `config/use-cases` of the
+workspace given as `[workspace-path]` (default: the current directory) on
+every tab press, so new use cases are available right away. Disabled, hidden
+and initial use cases are not offered.
 
 The shell is taken from `$SHELL` if not given; `bash`, `zsh` and `fish` are
 supported. On Windows, use Git Bash or WSL. Install the script once, e.g.:
