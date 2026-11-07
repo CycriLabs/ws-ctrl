@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import packageJson from '../package.json';
-import { init, run, sync } from './commands/index.js';
+import { completion, init, run, sync } from './commands/index.js';
 import {
   TemplatesAccess,
   UseCaseRunner,
@@ -35,6 +35,8 @@ const injector = createInjector([
 ]);
 setInjectImplementation(injector);
 
+let actionCommand: Command | undefined;
+
 new Command()
   .name(packageJson.name)
   .description(packageJson.description)
@@ -42,9 +44,18 @@ new Command()
   .addCommand(init)
   .addCommand(run)
   .addCommand(sync)
+  .addCommand(completion)
+  .hook('preAction', (_, command) => {
+    actionCommand = command;
+  })
   .parseAsync()
   .catch(err => {
     inject(Logger).error(err.message);
     process.exit(1);
   })
-  .finally(() => inject(Logger).success('Finished execution.'));
+  .finally(() => {
+    // completion prints its script to stdout, so it opts out of the banner
+    if (actionCommand !== completion) {
+      inject(Logger).success('Finished execution.');
+    }
+  });
